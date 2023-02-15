@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "448763504669",
+    "project_id": "lineadeprof2",
+    "storage_bucket": "lineadeprof2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448763504669:android:db4c01c231e0c5c33cfef4",
+        "android_client_info": {
+          "package_name": "com.example.lineadeprof"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "448763504669-dj8ao5jre2534ngdv69l381306g26nia.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1ej5Oypi-DmNk2mmOonKENBCGrN0nGnc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "448763504669-dj8ao5jre2534ngdv69l381306g26nia.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "448763504669-kr35ig6mu29q5r28n77fuue92uhmkkrp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.lineadeprof"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
