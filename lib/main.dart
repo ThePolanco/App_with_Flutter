@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'View/Registro.dart';
 import 'firebase_options.dart';
 
 void main() async{
@@ -23,6 +24,35 @@ class Home extends StatefulWidget {
 }
 
 class HomeStart extends State<Home>{
+  TextEditingController nombre = TextEditingController();
+  TextEditingController contrasena = TextEditingController();
+
+  validarDatos() async{
+    try{
+      CollectionReference ref = FirebaseFirestore.instance.collection("Usuarios");
+      QuerySnapshot usuario = await ref.get();
+
+      if(usuario.docs.length !=0){
+        for(var cursor in usuario.docs){
+          if(cursor.get("NombreUsuario") == nombre.text){
+            print("Usuario Encontrado");
+            print(cursor.get("IdentidadUsuario"));
+            if(cursor.get("ContraseñaUsuario") == contrasena.text){
+              print("ACCESO PERMITIDO!");
+              print("BIENVENIDO " + nombre.text);
+            }else{
+              print("La contraseña es incorrecta");
+            }
+          }
+        }
+      }else{
+        print("No hay documentos en la colección!");
+      }
+    }catch(e){
+      print("ERROR... " + e.toString());
+    }
+  }
+
 Widget build(BuildContext context){
   return MaterialApp(
     title: 'Bienvenidos',
@@ -43,17 +73,19 @@ Widget build(BuildContext context){
           ),
           Padding(padding: EdgeInsets.only(top: 10, left: 500, right: 500),
             child: TextField(
+              controller: nombre,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10)
                 ),
-                  labelText: 'Email Usuario',
-                  hintText: 'Digite email de usuario'
+                  labelText: 'Usuario',
+                  hintText: 'Digite su usuario'
               ),
             ),
           ),
           Padding(padding: EdgeInsets.only(top: 30, left: 500, right: 500),
             child: TextField(
+              controller: contrasena,
               decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)
@@ -66,10 +98,19 @@ Widget build(BuildContext context){
           Padding(padding: EdgeInsets.only(top: 20, left: 30,right: 30),
            child: ElevatedButton(
              onPressed: (){
-                print('Hola Mundo');
+                print('Ingresando...!');
+                validarDatos();
              },
-             child: Text('Enviar'),
+             child: Text('Ingresar'),
            ),
+          ),
+          Padding(padding: EdgeInsets.only(top: 20, left: 30,right: 30),
+            child: TextButton(
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (_) => Registro()));
+              },
+              child: Text('Registrar'),
+            ),
           )
         ],
       ),
