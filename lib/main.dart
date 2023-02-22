@@ -59,7 +59,7 @@ Widget build(BuildContext context){
     home: Scaffold(
       appBar: AppBar(
         title: Text('Linea de Profundización II'),
-
+        backgroundColor: Colors.teal,
       ),
       body: SingleChildScrollView(
       child: Column(

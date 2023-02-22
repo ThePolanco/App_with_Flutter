@@ -38,7 +38,7 @@ class RegistroApp extends State<Registro>{
     return Scaffold(
       appBar: AppBar(
         title: Text("REGISTRO DE USUARIOS"),
-        backgroundColor: Colors.indigoAccent,
+        backgroundColor: Colors.teal,
       ),
       body: SingleChildScrollView(
         child: Column(
