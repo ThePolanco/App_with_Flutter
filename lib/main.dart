@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'DTO/User.dart';
 import 'View/Registro.dart';
 import 'firebase_options.dart';
 
@@ -23,9 +24,15 @@ class Home extends StatefulWidget {
   HomeStart createState() => HomeStart();
 }
 
+
+
+
+
+
 class HomeStart extends State<Home>{
   TextEditingController nombre = TextEditingController();
   TextEditingController contrasena = TextEditingController();
+  User objUser = User();
 
   validarDatos() async{
     try{
@@ -86,6 +93,7 @@ Widget build(BuildContext context){
           Padding(padding: EdgeInsets.only(top: 30, left: 500, right: 500),
             child: TextField(
               controller: contrasena,
+              obscureText: true,
               decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10)
@@ -93,6 +101,7 @@ Widget build(BuildContext context){
                   labelText: 'Password Usuario',
                   hintText: 'Digite contraseña de usuario'
               ),
+
             ),
           ),
           Padding(padding: EdgeInsets.only(top: 20, left: 30,right: 30),
@@ -107,7 +116,7 @@ Widget build(BuildContext context){
           Padding(padding: EdgeInsets.only(top: 20, left: 30,right: 30),
             child: TextButton(
               onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (_) => Registro()));
+                Navigator.push(context, MaterialPageRoute(builder: (_) => Registro(objUser)));
               },
               child: Text('Registrar'),
             ),

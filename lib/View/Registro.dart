@@ -3,7 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import '../DTO/User.dart';
+
 class Registro extends StatefulWidget{
+  final User cadena;
+  Registro(this.cadena);
   @override
   RegistroApp createState() => RegistroApp();
 }
@@ -37,7 +41,7 @@ class RegistroApp extends State<Registro>{
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("REGISTRO DE USUARIOS"),
+        title: Text("REGISTRO DE USUARIOS --> " + widget.cadena.nombre),
         backgroundColor: Colors.teal,
       ),
       body: SingleChildScrollView(
