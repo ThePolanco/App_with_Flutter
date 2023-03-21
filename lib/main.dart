@@ -25,21 +25,18 @@ class Home extends StatefulWidget {
 }
 
 
-
-
-
-
 class HomeStart extends State<Home>{
   TextEditingController nombre = TextEditingController();
   TextEditingController contrasena = TextEditingController();
   User objUser = User();
 
   validarDatos() async{
+    bool flag = false;
     try{
       CollectionReference ref = FirebaseFirestore.instance.collection("Usuarios");
       QuerySnapshot usuario = await ref.get();
 
-      if(usuario.docs.length !=0){
+      if(usuario.docs.length != 0){
         for(var cursor in usuario.docs){
           if(cursor.get("NombreUsuario") == nombre.text){
             print("Usuario Encontrado");
@@ -47,9 +44,14 @@ class HomeStart extends State<Home>{
             if(cursor.get("ContraseñaUsuario") == contrasena.text){
               print("ACCESO PERMITIDO!");
               print("BIENVENIDO " + nombre.text);
+              mensaje("Información", "Acceso Permitido");
             }else{
               print("La contraseña es incorrecta");
             }
+            objUser.nombre = cursor.get("NombreUsuario");
+            objUser.identidad = cursor.get("IdentidadUsuario");
+            objUser.rol = "Administrador";
+            objUser.estado = true;
           }
         }
       }else{
@@ -126,5 +128,23 @@ Widget build(BuildContext context){
       ),
     ),
   );
+  }
+  void mensaje(String titulo, String contenido) {
+    showDialog(
+        context: context,
+        builder: (buildcontext) {
+          return AlertDialog(
+            title: Text(titulo),
+            content: Text(contenido),
+            actions: <Widget>[
+              ElevatedButton(
+                onPressed: () {
+
+                },
+                child: Text('Aceptar', style: TextStyle(color: Colors.blueAccent)),
+              )
+            ],
+          );
+        });
   }
 }
