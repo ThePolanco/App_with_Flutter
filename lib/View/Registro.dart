@@ -51,7 +51,7 @@ class RegistroApp extends State<Registro>{
                 onPressed: () {
 
                 },
-                child: Text('Aceptar', style: TextStyle(color: Colors.blueGrey)),
+                child: Text('Aceptar', style: TextStyle(color: Colors.white)),
               )
             ],
           );
@@ -68,7 +68,7 @@ class RegistroApp extends State<Registro>{
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(padding: EdgeInsets.only(top: 10, left: 500, right: 500),
+            Padding(padding: EdgeInsets.only(top: 10, left: 50, right: 50),
             child: TextField(
               controller: nombre,
               decoration: InputDecoration(
@@ -82,7 +82,7 @@ class RegistroApp extends State<Registro>{
               ),
             ),
             ),
-            Padding(padding: EdgeInsets.only(top: 10, left: 500, right: 500),
+            Padding(padding: EdgeInsets.only(top: 10, left: 50, right: 50),
               child: TextField(
                 controller: identidad,
                 decoration: InputDecoration(
@@ -96,7 +96,7 @@ class RegistroApp extends State<Registro>{
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.only(top: 10, left: 500, right: 500),
+            Padding(padding: EdgeInsets.only(top: 10, left: 50, right: 50),
               child: TextField(
                 controller: correo,
                 decoration: InputDecoration(
@@ -110,7 +110,7 @@ class RegistroApp extends State<Registro>{
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.only(top: 10, left: 500, right: 500),
+            Padding(padding: EdgeInsets.only(top: 10, left: 50, right: 50),
               child: TextField(
                 controller: telefono,
                 decoration: InputDecoration(
@@ -124,7 +124,7 @@ class RegistroApp extends State<Registro>{
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.only(top: 10, left: 500, right: 500),
+            Padding(padding: EdgeInsets.only(top: 10, left: 50, right: 50),
               child: TextField(
                 controller: contrasena,
                 decoration: InputDecoration(

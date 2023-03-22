@@ -32,7 +32,7 @@ class HomeStart extends State<Home>{
   TextEditingController contrasena = TextEditingController();
   final LocalAuthentication auth = LocalAuthentication();
   User objUser=User();
-
+ //Declaración variable que definira si es Invitado o Administrador
   int IyA = 0;
 
   validarDatos() async{
@@ -53,6 +53,8 @@ class HomeStart extends State<Home>{
               objUser.rol = ("Administrador");
               objUser.estado = cursor.get("Estado");
 
+              //Definicion que indica que Invitado correspondera a 1 y Admin a 2,
+              // llamando la clase mensaje para indicar el modulo de bienvenida
               if(cursor.get("Rol")=="Invitado"){
                 mensaje("Invitado","Bienvenido INVITADO " + nombre.text);
                 IyA = 1;
@@ -93,7 +95,7 @@ class HomeStart extends State<Home>{
                   child: Image.asset('img/img1.png'),
                 ),
               ),
-              Padding(padding: EdgeInsets.only(top: 10, left: 500, right: 500),
+              Padding(padding: EdgeInsets.only(top: 10, left: 50, right: 50),
                 child: TextField(
                   controller: nombre,
                   decoration: InputDecoration(
@@ -105,7 +107,7 @@ class HomeStart extends State<Home>{
                   ),
                 ),
               ),
-              Padding(padding: EdgeInsets.only(top: 30, left: 500, right: 500),
+              Padding(padding: EdgeInsets.only(top: 30, left: 50, right: 50),
                 child: TextField(
                   controller: contrasena,
                   obscureText:true,
@@ -236,7 +238,8 @@ class HomeStart extends State<Home>{
   }
 }
 
-//Apartado para la creacion de las clases invitado y Admin
+//Creación pantallas de invitado y Administrador,
+//cada una con diferente color y con botones de regreso a la clase main
 class invitado extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
