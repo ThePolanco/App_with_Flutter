@@ -30,6 +30,7 @@ environment:
 dependencies:
   cloud_firestore:
   firebase_core:
+  local_auth: ^1.1.6
   flutter:
     sdk: flutter
 
