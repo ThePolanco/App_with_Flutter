@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:lineadeprof/View/Geoposition.dart';
 import 'package:local_auth/auth_strings.dart';
 import 'DTO/User.dart';
 import 'View/Registro.dart';
@@ -52,6 +53,7 @@ class HomeStart extends State<Home>{
               objUser.identidad =cursor.get("IdentidadUsuario");
               objUser.rol = ("Administrador");
               objUser.estado = cursor.get("Estado");
+
 
               //Definicion que indica que Invitado correspondera a 1 y Admin a 2,
               // llamando la clase mensaje para indicar el modulo de bienvenida
@@ -169,6 +171,8 @@ class HomeStart extends State<Home>{
               ElevatedButton(
 
                 onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => Geoposition()));
                   if(IyA==1){
                     Navigator.push(
                       context,
@@ -254,7 +258,7 @@ class invitado extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text('Regresar'),
+          child: Text('GPS'),
         ),
       ),
     );
@@ -274,7 +278,7 @@ class admin extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text('Regresar'),
+          child: Text('GPS'),
         ),
       ),
     );
