@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import '../DTO/Token.dart';
 import '../DTO/User.dart';
 
 class Registro extends StatefulWidget{
@@ -18,10 +19,13 @@ class RegistroApp extends State<Registro>{
   TextEditingController correo = TextEditingController();
   TextEditingController telefono = TextEditingController();
   TextEditingController contrasena = TextEditingController();
+  Token tk = Token();
 
   final firebase= FirebaseFirestore.instance;
 
   insertarDatos() async{
+    String tok = await tk.generarToken();
+    print(tok);
     try{
       await firebase.collection("Usuarios").doc().set({
         "NombreUsuario": nombre.text,
@@ -30,7 +34,8 @@ class RegistroApp extends State<Registro>{
         "Telefonousuario": telefono.text,
         "ContraseñaUsuario": contrasena.text,
         "Rol": "Invitado",
-        "Estado" : true
+        "Estado" : true,
+        "Token" : await tk.generarToken()
       });
       print("Envio correcto");
       mensaje("Información", "Registro Correcto");
