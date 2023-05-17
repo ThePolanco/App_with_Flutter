@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:lineadeprof/View/Geoposition.dart';
+import 'package:lineadeprof/View/WS.dart';
 import 'package:local_auth/auth_strings.dart';
 import 'DTO/User.dart';
 import 'View/Registro.dart';
+import 'View/Rest.dart';
 import 'firebase_options.dart';
 import 'package:local_auth/local_auth.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -23,63 +25,63 @@ class MyApp extends StatelessWidget {
     return MaterialApp(debugShowCheckedModeBanner: false, home: Home());
   }
 }
+
 class Home extends StatefulWidget {
   @override
   HomeStart createState() => HomeStart();
 }
 
-class HomeStart extends State<Home>{
+class HomeStart extends State<Home> {
   TextEditingController nombre = TextEditingController();
   TextEditingController contrasena = TextEditingController();
   final LocalAuthentication auth = LocalAuthentication();
-  User objUser=User();
- //Declaración variable que definira si es Invitado o Administrador
+  User objUser = User();
+  //Declaración variable que definira si es Invitado o Administrador
   int IyA = 0;
 
-  validarDatos() async{
-    try{
-      CollectionReference ref = FirebaseFirestore.instance.collection("Usuarios");
+  validarDatos() async {
+    try {
+      CollectionReference ref =
+          FirebaseFirestore.instance.collection("Usuarios");
       QuerySnapshot usuario = await ref.get();
 
-      if(usuario.docs.length !=0){
-        for(var cursor in usuario.docs){
-          if(cursor.get("NombreUsuario") == nombre.text){
+      if (usuario.docs.length != 0) {
+        for (var cursor in usuario.docs) {
+          if (cursor.get("NombreUsuario") == nombre.text) {
             print("Usuario Encontrado");
             print(cursor.get("IdentidadUsuario"));
-            if(cursor.get("ContraseñaUsuario") == contrasena.text){
+            if (cursor.get("ContraseñaUsuario") == contrasena.text) {
               print("ACCESO PERMITIDO!");
               print("BIENVENIDO " + nombre.text);
               objUser.nombre = cursor.get("NombreUsuario");
-              objUser.identidad =cursor.get("IdentidadUsuario");
+              objUser.identidad = cursor.get("IdentidadUsuario");
               objUser.rol = ("Administrador");
               objUser.estado = cursor.get("Estado");
 
-
               //Definicion que indica que Invitado correspondera a 1 y Admin a 2,
               // llamando la clase mensaje para indicar el modulo de bienvenida
-              if(cursor.get("Rol")=="Invitado"){
-                mensaje("Invitado","Bienvenido INVITADO " + nombre.text);
+              if (cursor.get("Rol") == "Invitado") {
+                mensaje("Invitado", "Bienvenido INVITADO " + nombre.text);
                 IyA = 1;
-
-              }else if(cursor.get("Rol")=="Admin"){
-                mensaje("Administrador","Bienvenido ADMINISTRADOR " + nombre.text);
+              } else if (cursor.get("Rol") == "Admin") {
+                mensaje(
+                    "Administrador", "Bienvenido ADMINISTRADOR " + nombre.text);
                 IyA = 2;
               }
-
-            }else{
+            } else {
               print("La contraseña es incorrecta");
             }
           }
         }
-      }else{
+      } else {
         print("No hay documentos en la colección!");
       }
-    }catch(e){
+    } catch (e) {
       print("ERROR... " + e.toString());
     }
   }
 
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Bienvenidos',
       home: Scaffold(
@@ -90,76 +92,102 @@ class HomeStart extends State<Home>{
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+              Padding(
+                padding: EdgeInsets.only(top: 10, left: 10, right: 10),
                 child: Container(
                   width: 300,
                   height: 300,
                   child: Image.asset('img/img1.png'),
                 ),
               ),
-              Padding(padding: EdgeInsets.only(top: 10, left: 50, right: 50),
+              Padding(
+                padding: EdgeInsets.only(top: 10, left: 50, right: 50),
                 child: TextField(
                   controller: nombre,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
+                          borderRadius: BorderRadius.circular(10)),
                       labelText: 'Usuario',
-                      hintText: 'Digite su usuario'
-                  ),
+                      hintText: 'Digite su usuario'),
                 ),
               ),
-              Padding(padding: EdgeInsets.only(top: 30, left: 50, right: 50),
+              Padding(
+                padding: EdgeInsets.only(top: 30, left: 50, right: 50),
                 child: TextField(
                   controller: contrasena,
-                  obscureText:true,
+                  obscureText: true,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      ),
+                          borderRadius: BorderRadius.circular(10)),
                       labelText: 'Password Usuario',
-                      hintText: 'Digite contraseña de usuario'
-                  ),
+                      hintText: 'Digite contraseña de usuario'),
                 ),
               ),
-              Padding(padding: EdgeInsets.only(top: 20, left: 30,right: 30),
+              Padding(
+                padding: EdgeInsets.only(top: 20, left: 30, right: 30),
                 child: ElevatedButton(
-                  onPressed: (){
+                  onPressed: () {
                     print('Ingresando...!');
                     validarDatos();
                   },
                   child: Text('Ingresar'),
                 ),
               ),
-              Padding(padding: EdgeInsets.only(top: 20, left: 30,right: 30),
+              Padding(
+                padding: EdgeInsets.only(top: 20, left: 30, right: 30),
                 child: TextButton(
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => Registro(objUser)));
-
-
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => Registro(objUser)));
                   },
                   child: Text('Registrar'),
                 ),
               ),
-              Padding(padding: EdgeInsets.only(top:20, left: 30, right: 30),
+              Padding(
+                padding: EdgeInsets.only(top: 20, left: 30, right: 30),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(50,50),
+                    minimumSize: Size(50, 50),
                   ),
-                  onPressed: () async{
-                    if(await biometrico()){
+                  onPressed: () async {
+                    if (await biometrico()) {
                       mensaje("Huella", "Huella Encontrada");
                     }
                   },
-                  child: Icon(Icons.fingerprint, size : 80),
+                  child: Icon(Icons.fingerprint, size: 80),
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.only(top: 20, left: 30, right: 30),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => Rest(objUser)));
+                  },
+                  child: Text('Rest'),
+                ),
+              ),
+
+              //boton para el web service
+
+              Padding(
+                padding: EdgeInsets.only(top: 20, left: 30, right: 30),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => WS()));
+                  },
+                  child: Text('WS'),
+                ),
+              ),
+
             ],
           ),
         ),
       ),
     );
   }
+
   void mensaje(String titulo, String contenido) {
     showDialog(
         context: context,
@@ -169,22 +197,20 @@ class HomeStart extends State<Home>{
             content: Text(contenido),
             actions: <Widget>[
               ElevatedButton(
-
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (_) => Geoposition()));
-                  if(IyA==1){
+                  if (IyA == 1) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => invitado()),
                     );
-                  }else if(IyA==2){
+                  } else if (IyA == 2) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => admin()),
                     );
                   }
-
                 },
                 child: Text('Aceptar'),
               )
@@ -199,7 +225,7 @@ class HomeStart extends State<Home>{
     // bool flag = true;
     bool authenticated = false;
 
-    const androidString = const AndroidAuthMessages(
+    const androidString = AndroidAuthMessages(
       cancelButton: "Cancelar",
       goToSettingsButton: "Ajustes",
       signInTitle: "Ingrese",
@@ -217,7 +243,7 @@ class HomeStart extends State<Home>{
     // bool isBiometricSupported = await auth.();
     bool isBiometricSupported = await auth.isDeviceSupported();
     List<BiometricType> availableBiometrics =
-    await auth.getAvailableBiometrics();
+        await auth.getAvailableBiometrics();
     print(canCheckBiometrics); //Returns trueB
     // print("support -->" + isBiometricSupported.toString());
     print(availableBiometrics.toString()); //Returns [BiometricType.fingerprint]
@@ -253,7 +279,6 @@ class invitado extends StatelessWidget {
         backgroundColor: Colors.orange,
       ),
       body: Center(
-
         child: ElevatedButton(
           onPressed: () {
             Navigator.pop(context);

@@ -31,7 +31,7 @@ class RegistroApp extends State<Registro>{
         "NombreUsuario": nombre.text,
         "IdentidadUsuario": identidad.text,
         "CorreoUsuario": correo.text,
-        "Telefonousuario": telefono.text,
+        "TelefonoUsuario": telefono.text,
         "ContraseñaUsuario": contrasena.text,
         "Rol": "Invitado",
         "Estado" : true,
