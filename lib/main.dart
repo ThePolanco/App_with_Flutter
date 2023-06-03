@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:lineadeprof/View/Geoposition.dart';
 import 'package:lineadeprof/View/WS.dart';
 import 'package:local_auth/auth_strings.dart';
+import 'package:lineadeprof/Editar.dart';
+import 'package:lineadeprof/ActualizarDatos.dart';
+import 'DTO/Token.dart';
 import 'DTO/User.dart';
 import 'View/Registro.dart';
 import 'View/Rest.dart';
@@ -19,10 +22,20 @@ void main() async {
   runApp(MyApp());
 }
 
+final db=FirebaseFirestore.instance;
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: Home());
+    return MaterialApp(
+        title: 'Material App',
+        initialRoute:'/',
+        routes: {
+          '/': (context) => Home(),
+          '/editar': (context)=> const AddNamePage(),
+          '/actualizar': (context)=> const EditNamePage(),
+        },
+    );
   }
 }
 
@@ -168,7 +181,7 @@ class HomeStart extends State<Home> {
                 ),
               ),
 
-              //boton para el web service
+              //Boton para el web service
 
               Padding(
                 padding: EdgeInsets.only(top: 20, left: 30, right: 30),
@@ -268,7 +281,7 @@ class HomeStart extends State<Home> {
   }
 }
 
-//Creación pantallas de invitado y Administrador,
+//Creación pantallas de Invitado y Administrador,
 //cada una con diferente color y con botones de regreso a la clase main
 class invitado extends StatelessWidget {
   @override
@@ -290,22 +303,124 @@ class invitado extends StatelessWidget {
   }
 }
 
+//DESDE ADMIN SE MANEJARAN LAS ACCIONES DEL CRUD EXCEPTUANDO LA DE INSERTAR QUE YA SE ENCUENTRA EN REGISTRAR
+/********************************************************************************************************************/
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final CollectionReference _mainCollection = _firestore.collection('Usuarios');
 class admin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Administrador"),
-        backgroundColor: Colors.indigo,
+        title: Text('Admin'),
+        backgroundColor: Colors.amberAccent,
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('GPS'),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => Actualizar()));
+
+                },
+                child: Text('Consultar'),
+              ),
+            ),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context,'/editar');
+                },
+                child: const Icon(Icons.add),
+              ),
+            ),
+          ],
         ),
+
+      ),
+    );
+
+  }
+}
+
+//Actualizar
+
+//Pagina para consultar y actualizar
+class Actualizar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Consultar'),
+        backgroundColor: Colors.deepPurple,
+      ),
+      body: FutureBuilder(
+          future: getPeople(),
+          builder: ((context, snapshot){
+            if(snapshot.hasData){
+              return ListView.builder(
+                  itemCount: snapshot.data?.length,
+                  itemBuilder: (context, index){
+                    return ListTile(
+                        onLongPress: ()  async {
+                          deletePeople(snapshot.data?[index]['uid']);
+                        },
+                        title: Text(snapshot.data?[index]['NombreUsuario']),
+                        onTap: (() {
+                          Navigator.pushNamed(context, "/actualizar", arguments: {
+                            "NombreUsuario": snapshot.data?[index]['NombreUsuario'],
+                            "CorreoUsuario":snapshot.data?[index]['CorreoUsuario'],
+                            "IdentidadUsuario":snapshot.data?[index]['IdentidadUsuario'],
+                            "Telefonousuario":snapshot.data?[index]['Telefonousuario'],
+                            "ContraseñaUsuario":snapshot.data?[index]['ContraseñaUsuario'],
+                            "Rol":snapshot.data?[index]['Rol'],
+                            "uid":snapshot.data?[index]['uid'],
+                          });
+                        }));
+                  });
+            }else{
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }
+          )
       ),
     );
   }
 }
+
+FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+// Funcion para eliminar datos
+
+Future<void> deletePeople(String uid) async{
+  await firestore.collection("Usuarios").doc(uid).delete();
+}
+
+//Fin de la funcion para eliminar datos
+
+
+//Crear funcion para consultar del crud
+Future<List> getPeople() async{
+  List people = [];
+  QuerySnapshot querySnapshot=await firestore.collection('Usuarios').get();
+  for (var doc in querySnapshot.docs){
+    final Map<String, dynamic> data=doc.data() as Map<String, dynamic>;
+    final person ={
+      "NombreUsuario": data['NombreUsuario'],
+      "CorreoUsuario": data['CorreoUsuario'],
+      "IdentidadUsuario": data['IdentidadUsuario'],
+      "Telefonousuario": data ['Telefonousuario'],
+      "ContraseñaUsuario": data ['ContraseñaUsuario'],
+      "Rol": data ['Rol'],
+      "uid":doc.id,
+    };
+    people.add(person);
+  };
+
+  return people;
+}
+//Fin de funcion para consultar el crud
